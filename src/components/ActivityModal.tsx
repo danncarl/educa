@@ -200,18 +200,34 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose 
           </h2>
 
           {/* SINGLE BIG DOWNLOAD BUTTON */}
-          <button
-            onClick={handleDownload}
-            className={`w-full py-4 px-6 rounded-2xl ${style.btnBg} font-black text-base tracking-wide shadow-md hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border-b-4 border-black/20`}
-          >
-            <ArrowDownToLine className="w-5 h-5 stroke-[2.5]" />
-            <span>Baixar Atividade (PDF) 🌈</span>
-          </button>
+          {activity.pdfUrl ? (
+            <a
+              href={activity.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-full py-4 px-6 rounded-2xl ${style.btnBg} font-black text-base tracking-wide shadow-md hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border-b-4 border-black/20 text-center`}
+            >
+              <ArrowDownToLine className="w-5 h-5 stroke-[2.5]" />
+              <span>Baixar Atividade (PDF) 🌈</span>
+            </a>
+          ) : (
+            <button
+              onClick={handleDownload}
+              className={`w-full py-4 px-6 rounded-2xl ${style.btnBg} font-black text-base tracking-wide shadow-md hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border-b-4 border-black/20`}
+            >
+              <ArrowDownToLine className="w-5 h-5 stroke-[2.5]" />
+              <span>Baixar Atividade (PDF) 🌈</span>
+            </button>
+          )}
 
           {/* Helpful Kid-Friendly Notice */}
           <div className="flex gap-2 p-3 mt-4 bg-slate-50 rounded-2xl text-[10px] text-slate-500 border border-slate-100 leading-relaxed font-semibold text-left">
             <HelpCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-            <span><strong>Como salvar no celular ou PC:</strong> Na tela de impressão que vai abrir, selecione a opção <strong>"Salvar como PDF"</strong> e guarde no seu aparelho!</span>
+            {activity.pdfUrl ? (
+              <span><strong>Aviso:</strong> O arquivo original completo em PDF de alta qualidade será aberto diretamente do Google Drive para você salvar ou imprimir sem erros!</span>
+            ) : (
+              <span><strong>Como salvar no celular ou PC:</strong> Na tela de impressão que vai abrir, selecione a opção <strong>"Salvar como PDF"</strong> e guarde no seu aparelho!</span>
+            )}
           </div>
         </div>
       </motion.div>

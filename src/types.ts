@@ -13,4 +13,5 @@ export interface Activity {
   pagesCount: number;
   difficulty: "Fácil" | "Médio" | "Difícil";
   worksheetType: string;
+  pdfUrl?: string;
 }
