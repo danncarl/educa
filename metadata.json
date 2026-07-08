@@ -1,0 +1,6 @@
+{
+  "name": "Biblioteca Digital de Atividades",
+  "description": "Uma biblioteca digital moderna e intuitiva de atividades pedagógicas em PDF para professores da Educação Infantil e Ensino Fundamental.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
