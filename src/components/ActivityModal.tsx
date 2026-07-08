@@ -151,14 +151,18 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose 
       {/* Since this is a direct child of body, #root display:none during media print won't hide it */}
       {createPortal(
         <div className="hidden print:block printable-worksheet-wrapper">
-          <WorksheetRenderer
-            type={activity.worksheetType}
-            schoolName=""
-            teacherName=""
-            studentName=""
-            dateStr=""
-            classroomStr=""
-          />
+          {Array.from({ length: Math.min(activity.pagesCount || 1, 4) }).map((_, pageIdx) => (
+            <WorksheetRenderer
+              key={pageIdx}
+              type={activity.worksheetType}
+              pageIndex={pageIdx}
+              schoolName=""
+              teacherName=""
+              studentName=""
+              dateStr=""
+              classroomStr=""
+            />
+          ))}
         </div>,
         document.body
       )}

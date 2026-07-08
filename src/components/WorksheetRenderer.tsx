@@ -7,6 +7,7 @@ import {
 
 interface WorksheetRendererProps {
   type: string;
+  pageIndex?: number;
   studentName?: string;
   teacherName?: string;
   schoolName?: string;
@@ -16,6 +17,7 @@ interface WorksheetRendererProps {
 
 export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
   type,
+  pageIndex = 0,
   studentName = "",
   teacherName = "",
   schoolName = "",
@@ -37,7 +39,7 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
   );
 
   return (
-    <div className="w-full max-w-[210mm] mx-auto bg-white p-6 md:p-10 border border-slate-200 shadow-md rounded-2xl relative aspect-[1/1.414] text-slate-800 font-sans flex flex-col justify-between overflow-hidden">
+    <div className="worksheet-page w-full max-w-[210mm] mx-auto bg-white p-6 md:p-10 border border-slate-200 shadow-md rounded-2xl relative aspect-[1/1.414] text-slate-800 font-sans flex flex-col justify-between overflow-hidden mb-8 last:mb-0 print:mb-0 print:border-none print:shadow-none print:rounded-none">
       
       {/* Absolute cute background elements for preview, hidden in print */}
       <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-amber-400 to-emerald-400 print:hidden" />
@@ -68,7 +70,11 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
                 { letter: "I", word: "IGREJA", emoji: "⛪", dotted: "I I I I I" },
                 { letter: "O", word: "OLHO", emoji: "👁️", dotted: "O O O O O" },
                 { letter: "U", word: "UVA", emoji: "🍇", dotted: "U U U U U" },
-              ].map((item, idx) => (
+              ].filter((_, idx) => {
+                if (pageIndex === 0) return idx < 2;
+                if (pageIndex === 1) return idx >= 2 && idx < 4;
+                return idx === 4;
+              }).map((item, idx) => (
                 <div key={idx} className="flex gap-4 items-center border border-slate-200 p-2.5 rounded-xl bg-slate-50/50 print:bg-white print:border-slate-300">
                   <div className="w-14 h-14 bg-amber-400/20 text-amber-600 rounded-lg flex items-center justify-center font-black text-3xl border border-amber-200 print:bg-white print:text-slate-800 print:border-slate-300">
                     {item.letter}
@@ -104,7 +110,7 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              {[
+              {(pageIndex === 0 ? [
                 { 
                   left: ["🦆", "🦆"], right: ["🦆"], 
                   title: "Os patinhos no lago:" 
@@ -121,7 +127,41 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
                   left: ["🐔"], right: ["🐔", "🐔", "🐔"], 
                   title: "As galinhas no galinheiro:" 
                 },
-              ].map((item, idx) => (
+              ] : pageIndex === 1 ? [
+                { 
+                  left: ["🐑", "🐑", "🐑"], right: ["🐑"], 
+                  title: "As ovelhas no campo:" 
+                },
+                { 
+                  left: ["🐴", "🐴"], right: ["🐴", "🐴", "🐴"], 
+                  title: "Os cavalos no estábulo:" 
+                },
+                { 
+                  left: ["🐐"], right: ["🐐", "🐐"], 
+                  title: "As cabras na montanha:" 
+                },
+                { 
+                  left: ["🐥", "🐥"], right: ["🐥", "🐥"], 
+                  title: "Os pintinhos ciscando:" 
+                },
+              ] : [
+                { 
+                  left: ["🍎", "🍎", "🍎"], right: ["🍎", "🍎"], 
+                  title: "As maçãs na árvore:" 
+                },
+                { 
+                  left: ["⭐", "⭐"], right: ["⭐", "⭐", "⭐"], 
+                  title: "As estrelas no céu:" 
+                },
+                { 
+                  left: ["🎈", "🎈"], right: ["🎈", "🎈", "🎈"], 
+                  title: "Os balões da festa:" 
+                },
+                { 
+                  left: ["🐠", "🐠", "🐠"], right: ["🐠", "🐠"], 
+                  title: "Os peixinhos no aquário:" 
+                },
+              ]).map((item, idx) => (
                 <div key={idx} className="border-2 border-slate-100 p-4 rounded-xl bg-white space-y-3 flex flex-col justify-between shadow-sm print:shadow-none print:border-slate-300">
                   <span className="text-xs font-bold text-slate-500">{item.title}</span>
                   <div className="flex items-center justify-around gap-2 my-2">
@@ -178,7 +218,7 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="space-y-8 py-4">
-              {[
+              {(pageIndex === 0 ? [
                 { 
                   icon: "🐝", name: "Abelha", target: "🌸", 
                   pathD: "M 10 20 L 50 20 L 90 20 L 130 20 L 170 20 L 210 20 L 250 20 L 290 20 L 330 20 L 370 20 L 410 20 L 450 20" 
@@ -195,7 +235,33 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
                   icon: "🦋", name: "Borboleta", target: "🌻", 
                   pathD: "M 10 20 C 30 0, 60 40, 90 20 S 150 0, 180 20 S 240 40, 270 20 S 330 0, 360 20 S 420 40, 450 20" 
                 }
-              ].map((item, idx) => (
+              ] : pageIndex === 1 ? [
+                { 
+                  icon: "🚀", name: "Foguete", target: "🌙", 
+                  pathD: "M 10 20 L 50 20 L 90 20 L 130 20 L 170 20 L 210 20 L 250 20 L 290 20 L 330 20 L 370 20 L 410 20 L 450 20" 
+                },
+                { 
+                  icon: "👽", name: "E.T.", target: "🛸", 
+                  pathD: "M 10 20 Q 50 0, 90 20 T 170 20 T 250 20 T 330 20 T 410 20 L 450 20" 
+                },
+                { 
+                  icon: "🧑‍🚀", name: "Astronauta", target: "🪐", 
+                  pathD: "M 10 20 C 30 0, 60 40, 90 20 S 150 0, 180 20 S 240 40, 270 20 S 330 0, 360 20 S 420 40, 450 20" 
+                }
+              ] : [
+                { 
+                  icon: "🚢", name: "Navio", target: "🏝️", 
+                  pathD: "M 10 20 L 50 20 L 90 20 L 130 20 L 170 20 L 210 20 L 250 20 L 290 20 L 330 20 L 370 20 L 410 20 L 450 20" 
+                },
+                { 
+                  icon: "🚗", name: "Carro", target: "🏠", 
+                  pathD: "M 10 20 Q 50 0, 90 20 T 170 20 T 250 20 T 330 20 T 410 20 L 450 20" 
+                },
+                { 
+                  icon: "✈️", name: "Avião", target: "☁️", 
+                  pathD: "M 10 20 C 30 0, 60 40, 90 20 S 150 0, 180 20 S 240 40, 270 20 S 330 0, 360 20 S 420 40, 450 20" 
+                }
+              ]).map((item, idx) => (
                 <div key={idx} className="flex items-center justify-between gap-4 border border-slate-100 p-4 rounded-xl bg-slate-50/40 print:bg-white print:border-slate-300">
                   <div className="flex flex-col items-center">
                     <span className="text-3xl filter drop-shadow select-none">{item.icon}</span>
@@ -629,11 +695,23 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="space-y-4 pt-1">
-              {[
+              {(pageIndex === 0 ? [
                 "A amizade e o respeito fazem o mundo feliz.",
                 "O sol brilha forte e aquece nosso dia no parque.",
                 "Ler livros nos leva para mundos de fantasia."
-              ].map((phrase, idx) => (
+              ] : pageIndex === 1 ? [
+                "O respeito aos professores é muito importante.",
+                "Brincar com os amigos enche o coração de alegria.",
+                "A imaginação nos faz voar muito alto."
+              ] : pageIndex === 2 ? [
+                "Cuidar das plantas e animais salva o planeta.",
+                "A escola é um lugar mágico para aprender.",
+                "Dividir os brinquedos faz bem para todos nós."
+              ] : [
+                "A honestidade é nossa maior riqueza sempre.",
+                "O amor da família é nosso porto seguro.",
+                "Sorrir todos os dias espalha muita felicidade."
+              ]).map((phrase, idx) => (
                 <div key={idx} className="space-y-2 border border-slate-100 p-3 rounded-xl bg-slate-50/20">
                   <div className="font-mono text-base tracking-[0.05em] text-slate-300 select-none border-b border-dashed border-slate-200 pb-1 italic font-medium">
                     {phrase}
@@ -669,13 +747,31 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="grid grid-cols-1 gap-2 pt-1">
-              {[
+              {(pageIndex === 0 ? [
                 { letter: "B", syllables: "ba  be  bi  bo  bu  bão" },
                 { letter: "C", syllables: "ca  ce  ci  co  cu  cão" },
                 { letter: "D", syllables: "da  de  di  do  du  dão" },
                 { letter: "F", syllables: "fa  fe  fi  fo  fu  fão" },
                 { letter: "G", syllables: "ga  ge  gi  go  gu  gão" }
-              ].map((row, idx) => (
+              ] : pageIndex === 1 ? [
+                { letter: "H", syllables: "ha  he  hi  ho  hu  hão" },
+                { letter: "J", syllables: "ja  je  ji  jo  ju  jão" },
+                { letter: "L", syllables: "la  le  li  lo  lu  lão" },
+                { letter: "M", syllables: "ma  me  mi  mo  mu  mão" },
+                { letter: "N", syllables: "na  ne  ni  no  nu  não" }
+              ] : pageIndex === 2 ? [
+                { letter: "P", syllables: "pa  pe  pi  po  pu  pão" },
+                { letter: "R", syllables: "ra  re  ri  ro  ru  rão" },
+                { letter: "S", syllables: "sa  se  si  so  su  são" },
+                { letter: "T", syllables: "ta  te  ti  to  tu  tão" },
+                { letter: "V", syllables: "va  ve  vi  vo  vu  vão" }
+              ] : [
+                { letter: "X", syllables: "xa  xe  xi  xo  xu  xão" },
+                { letter: "Z", syllables: "za  ze  zi  zo  zu  zão" },
+                { letter: "LH", syllables: "lha lhe lhi lho lhu lhão" },
+                { letter: "NH", syllables: "nha nhe nhi nho nhu nhão" },
+                { letter: "CH", syllables: "cha che chi cho chu chão" }
+              ]).map((row, idx) => (
                 <div key={idx} className="flex items-center gap-3 border border-slate-200 p-2 rounded-xl bg-white">
                   <div className="w-10 h-10 bg-sky-100 text-sky-700 font-black text-xl rounded-lg flex items-center justify-center border border-sky-200">
                     {row.letter}
@@ -706,11 +802,19 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="space-y-4 pt-2">
-              {[
+              {(pageIndex === 0 ? [
                 { label: "Caminho em Laços (Foguete 🚀 ➔ Lua 🌙)", trace: "e e e e e e e e e e e e e" },
                 { label: "Caminho em Ondas (Patinho 🦆 ➔ Lagoa 🌊)", trace: "˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜ ˜" },
                 { label: "Caminho em Dentes (Carrinho 🚗 ➔ Garagem 🏠)", trace: "v v v v v v v v v v v v v" }
-              ].map((item, idx) => (
+              ] : pageIndex === 1 ? [
+                { label: "Caminho em Loops (Abelha 🐝 ➔ Flor 🌸)", trace: "@ @ @ @ @ @ @ @ @ @ @ @" },
+                { label: "Caminho Suave (Peixe 🐟 ➔ Recife 🪸)", trace: "~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~" },
+                { label: "Caminho Zigue-Zague (Coelho 🐰 ➔ Cenoura 🥕)", trace: "/\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\" }
+              ] : [
+                { label: "Caminho Curvo (Borboleta 🦋 ➔ Jardim 🌻)", trace: "C C C C C C C C C C C" },
+                { label: "Caminho de Pulos (Sapo 🐸 ➔ Lago 🍀)", trace: "U U U U U U U U U U U" },
+                { label: "Caminho Reto (Balão 🎈 ➔ Nuvem ☁️)", trace: "_ _ _ _ _ _ _ _ _ _ _ _" }
+              ]).map((item, idx) => (
                 <div key={idx} className="space-y-1.5 border border-slate-200 p-3 rounded-xl bg-slate-50/30">
                   <span className="text-[11px] font-bold text-slate-500 block uppercase">{item.label}</span>
                   <div className="font-mono text-2xl tracking-[0.5em] text-slate-300 select-none border-b border-dashed border-slate-200 pb-2">
@@ -739,12 +843,27 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-1">
-              {[
+              {(pageIndex === 0 ? [
                 { upper: "A a", word: "ABELHA 🐝", trace: "A a A a A a A a" },
                 { upper: "B b", word: "BOLA ⚽", trace: "B b B b B b B b" },
                 { upper: "C c", word: "CASA 🏠", trace: "C c C c C c C c" },
                 { upper: "D d", word: "DADO 🎲", trace: "D d D d D d D d" }
-              ].map((item, idx) => (
+              ] : pageIndex === 1 ? [
+                { upper: "E e", word: "ESCOLA 🏫", trace: "E e E e E e E e" },
+                { upper: "F f", word: "FOCA 🦭", trace: "F f F f F f F f" },
+                { upper: "G g", word: "GATO 🐱", trace: "G g G g G g G g" },
+                { upper: "H h", word: "HARPA 🪕", trace: "H h H h H h H h" }
+              ] : pageIndex === 2 ? [
+                { upper: "I i", word: "IGREJA ⛪", trace: "I i I i I i I i" },
+                { upper: "J j", word: "JACARÉ 🐊", trace: "J j J j J j J j" },
+                { upper: "K k", word: "KIWI 🥝", trace: "K k K k K k K k" },
+                { upper: "L l", word: "LEÃO 🦁", trace: "L l L l L l L l" }
+              ] : [
+                { upper: "M m", word: "MACACO 🐒", trace: "M m M m M m M m" },
+                { upper: "N n", word: "NAVIO 🚢", trace: "N n N n N n N n" },
+                { upper: "O o", word: "OLHO 👁️", trace: "O o O o O o O o" },
+                { upper: "P p", word: "PATO 🦆", trace: "P p P p P p P p" }
+              ]).map((item, idx) => (
                 <div key={idx} className="border border-slate-200 p-3 rounded-xl bg-white space-y-1">
                   <div className="flex justify-between items-center border-b border-slate-100 pb-1">
                     <span className="font-black text-xl text-amber-600">{item.upper}</span>
@@ -776,11 +895,23 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="space-y-4 pt-1">
-              {[
+              {(pageIndex === 0 ? [
                 "O gato dorme.",
                 "A bola rola.",
                 "Eu amo estudar."
-              ].map((phrase, idx) => (
+              ] : pageIndex === 1 ? [
+                "O sol brilha.",
+                "A flor cresce.",
+                "O mar é azul."
+              ] : pageIndex === 2 ? [
+                "O cão late.",
+                "O bolo é bom.",
+                "O pássaro voa."
+              ] : [
+                "A lua brilha.",
+                "Eu amo ler.",
+                "O vento sopra."
+              ]).map((phrase, idx) => (
                 <div key={idx} className="space-y-2 border border-slate-200 p-3 rounded-xl bg-white">
                   <div className="font-serif italic text-lg text-slate-300 border-b border-dashed border-slate-200 pb-1">
                     {phrase}
@@ -851,11 +982,21 @@ export const WorksheetRenderer: React.FC<WorksheetRendererProps> = ({
             </div>
 
             <div className="grid grid-cols-1 gap-3 pt-1">
-              {[
+              {(pageIndex === 0 ? [
                 { number: "1", objects: "🚂 Trem", trace: "1   1   1   1   1" },
                 { number: "2", objects: "🦆🦆 Patinhos", trace: "2   2   2   2   2" },
                 { number: "3", objects: "⭐⭐⭐ Estrelas", trace: "3   3   3   3   3" }
-              ].map((row, idx) => (
+              ] : pageIndex === 1 ? [
+                { number: "4", objects: "🍎🍎🍎🍎 Maçãs", trace: "4   4   4   4   4" },
+                { number: "5", objects: "🎈🎈🎈🎈🎈 Balões", trace: "5   5   5   5   5" },
+                { number: "6", objects: "🌸🌸🌸🌸🌸🌸 Flores", trace: "6   6   6   6   6" }
+              ] : pageIndex === 2 ? [
+                { number: "7", objects: "🐟🐟🐟🐟🐟🐟🐟 Peixes", trace: "7   7   7   7   7" },
+                { number: "8", objects: "🦋🦋🦋🦋🦋🦋🦋🦋 Borboletas", trace: "8   8   8   8   8" },
+                { number: "9", objects: "🐞🐞🐞🐞🐞🐞🐞🐞🐞 Joaninhas", trace: "9   9   9   9   9" }
+              ] : [
+                { number: "10", objects: "🍬🍬🍬🍬🍬🍬🍬🍬🍬🍬 Balas", trace: "10  10  10  10  10" }
+              ]).map((row, idx) => (
                 <div key={idx} className="flex items-center gap-4 border border-slate-200 p-3 rounded-xl bg-white">
                   <div className="w-12 h-12 bg-emerald-100 text-emerald-700 font-black text-2xl rounded-full flex items-center justify-center border border-emerald-200">
                     {row.number}
